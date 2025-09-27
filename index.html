@@ -1,0 +1,411 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>История Саши</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .game-container {
+            width: 100%;
+            max-width: 800px;
+            background: white;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+            position: relative;
+        }
+
+        .game-header {
+            background: linear-gradient(90deg, #ff6b6b, #4ecdc4);
+            padding: 15px 20px;
+            color: white;
+            text-align: center;
+            font-weight: bold;
+            font-size: 18px;
+        }
+
+        .game-content {
+            position: relative;
+            min-height: 500px;
+        }
+
+        .background {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-size: cover;
+            background-position: center;
+            opacity: 0.3;
+            z-index: 1;
+        }
+
+        .characters {
+            position: absolute;
+            top: 50%;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            justify-content: space-around;
+            align-items: flex-end;
+            padding: 20px;
+            z-index: 2;
+        }
+
+        .character {
+            width: 120px;
+            height: 200px;
+            background-size: contain;
+            background-repeat: no-repeat;
+            background-position: bottom center;
+            transition: transform 0.3s ease;
+        }
+
+        .character:hover {
+            transform: scale(1.1);
+        }
+
+        .dialogue-container {
+            position: relative;
+            z-index: 3;
+            padding: 30px;
+            min-height: 200px;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+        }
+
+        .dialogue-box {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            border-left: 4px solid #4ecdc4;
+        }
+
+        .character-name {
+            font-weight: bold;
+            color: #ff6b6b;
+            margin-bottom: 8px;
+            font-size: 16px;
+        }
+
+        .dialogue-text {
+            font-size: 18px;
+            line-height: 1.5;
+            color: #333;
+        }
+
+        .thoughts {
+            font-style: italic;
+            color: #666;
+        }
+
+        .choices-container {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            z-index: 3;
+            padding: 0 30px 30px;
+        }
+
+        .choice-btn {
+            background: linear-gradient(90deg, #4ecdc4, #44a08d);
+            color: white;
+            border: none;
+            padding: 15px 25px;
+            border-radius: 12px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: left;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .choice-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+
+        .choice-btn.good {
+            background: linear-gradient(90deg, #4ecdc4, #44a08d);
+        }
+
+        .choice-btn.bad {
+            background: linear-gradient(90deg, #ff6b6b, #ee5a52);
+        }
+
+        .result-container {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 15px;
+            padding: 25px;
+            margin-top: 20px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            z-index: 3;
+            position: relative;
+        }
+
+        .lives {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background: #ff6b6b;
+            color: white;
+            padding: 5px 10px;
+            border-radius: 10px;
+            font-weight: bold;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        .menu-container {
+            padding: 40px;
+            text-align: center;
+        }
+
+        .menu-title {
+            font-size: 32px;
+            margin-bottom: 30px;
+            color: #333;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .menu-btn {
+            background: linear-gradient(90deg, #667eea, #764ba2);
+            color: white;
+            border: none;
+            padding: 15px 40px;
+            border-radius: 25px;
+            font-size: 18px;
+            cursor: pointer;
+            margin: 10px;
+            transition: all 0.3s ease;
+        }
+
+        .menu-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+        }
+
+        .help-text {
+            text-align: left;
+            line-height: 1.6;
+            color: #333;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .help-text h3 {
+            color: #667eea;
+            margin: 20px 0 10px 0;
+        }
+
+        .back-btn {
+            position: absolute;
+            top: 15px;
+            left: 15px;
+            background: rgba(255,255,255,0.8);
+            border: none;
+            padding: 8px 15px;
+            border-radius: 10px;
+            cursor: pointer;
+            font-weight: bold;
+            color: #667eea;
+        }
+    </style>
+</head>
+<body>
+    <div class="game-container">
+        <!-- Стартовый экран -->
+        <div id="start-screen" class="menu-container">
+            <h1 class="menu-title">История Саши</h1>
+            <button class="menu-btn" onclick="showIntro()">Начать игру</button>
+            <button class="menu-btn" onclick="showHelp()">Помощь</button>
+        </div>
+
+        <!-- Экран помощи -->
+        <div id="help-screen" class="menu-container hidden">
+            <button class="back-btn" onclick="showStart()">← Назад</button>
+            <h1 class="menu-title">Помощь</h1>
+            <div class="help-text">
+                <p>Добро пожаловать в интерактивную историю "История Саши"!</p>
+                <h3>Как играть:</h3>
+                <p>• Читайте диалоги персонажей и следите за сюжетом</p>
+                <p>• В ключевые моменты вам будут предложены выборы</p>
+                <p>• Ваши решения влияют на развитие истории и отношения с персонажами</p>
+                <p>• Некоторые выборы могут стоить вам жизней (у вас есть 3 жизни)</p>
+                <h3>Управление:</h3>
+                <p>• Используйте кнопки выбора для принятия решений</p>
+                <p>• Кнопка "Назад" возвращает вас в главное меню</p>
+                <h3>Советы:</h3>
+                <p>• Думайте перед тем, как принимать решения</p>
+                <p>• Постарайтесь сохранить все жизни для достижения лучшего конца</p>
+            </div>
+        </div>
+
+        <!-- Интро -->
+        <div id="intro-screen" class="menu-container hidden">
+            <button class="back-btn" onclick="showStart()">← Назад</button>
+            <h1 class="menu-title">Интро</h1>
+            <div class="help-text">
+                <p>Это история о мальчике по имени Саша, который растет в Мурманске.</p>
+                <p>Каждое его решение формирует его характер и влияет на будущее.</p>
+                <p>Сможете ли вы пройти путь от семилетнего ребенка до взрослого человека, сохраняя человечность и ответственность?</p>
+                <p>Ваш выбор определит, кем станет Саша...</p>
+            </div>
+            <button class="menu-btn" onclick="startGame()">Начать историю</button>
+        </div>
+
+        <!-- Игровой экран -->
+        <div id="game-screen" class="hidden">
+            <div class="game-header">
+                <span id="stage-info">Этап №1 • Возраст: 7 лет • Место: Мурманск, Инженерная ул.</span>
+            </div>
+            <div class="game-content">
+                <!-- МЕСТО ДЛЯ ФОНА - ЗАМЕНИТЕ URL НА СВОЙ -->
+                <div class="background" id="background" style="background-image: url('https://placehold.co/800x500/e0e0e0/999999?text=Фон+Мурманск');"></div>
+                
+                <!-- МЕСТО ДЛЯ ПЕРСОНАЖЕЙ - ЗАМЕНИТЕ URL НА СВОИ -->
+                <div class="characters">
+                    <div class="character" id="sasha" style="background-image: url('https://placehold.co/120x200/4ecdc4/ffffff?text=Саша');"></div>
+                    <div class="character" id="mama" style="background-image: url('https://placehold.co/120x200/ff6b6b/ffffff?text=Мама');"></div>
+                    <div class="character" id="dima" style="background-image: url('https://placehold.co/120x200/44a08d/ffffff?text=Дима');"></div>
+                </div>
+                
+                <div class="dialogue-container" id="dialogue-container">
+                    <div class="dialogue-box">
+                        <div class="character-name">Мама:</div>
+                        <div class="dialogue-text">«Саша, мне нужно сходить в парикмахерскую. Будь добр, присмотри за Димой. Он маленький, может упасть»</div>
+                    </div>
+                    <div class="dialogue-box">
+                        <div class="character-name">Саша:</div>
+                        <div class="dialogue-text">«Маам, ну я же хочу с ребятами в футбол поиграть…»</div>
+                    </div>
+                    <div class="dialogue-box">
+                        <div class="character-name">Дима (тянет за руку):</div>
+                        <div class="dialogue-text">«Саш, пошли гулять! На улице так тепло!»</div>
+                    </div>
+                    <div class="dialogue-box">
+                        <div class="character-name">Мама (строго):</div>
+                        <div class="dialogue-text">«Ты старший брат. На тебе ответственность.»</div>
+                    </div>
+                    <div class="dialogue-box">
+                        <div class="character-name thoughts">Саша (думает):</div>
+                        <div class="dialogue-text">«Эх, как же быть?..»</div>
+                    </div>
+                </div>
+                
+                <div class="choices-container" id="choices-container">
+                    <button class="choice-btn good" onclick="makeChoice('good')">
+                        ✅ Присмотреть за Димой и пойти с ним гулять
+                    </button>
+                    <button class="choice-btn bad" onclick="makeChoice('bad')">
+                        ❌ Убежать к друзьям и оставить Диму
+                    </button>
+                </div>
+                
+                <div class="result-container hidden" id="result-container">
+                    <div id="result-text"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let lives = 3;
+
+        function showStart() {
+            document.getElementById('start-screen').classList.remove('hidden');
+            document.getElementById('help-screen').classList.add('hidden');
+            document.getElementById('intro-screen').classList.add('hidden');
+            document.getElementById('game-screen').classList.add('hidden');
+        }
+
+        function showHelp() {
+            document.getElementById('start-screen').classList.add('hidden');
+            document.getElementById('help-screen').classList.remove('hidden');
+            document.getElementById('intro-screen').classList.add('hidden');
+            document.getElementById('game-screen').classList.add('hidden');
+        }
+
+        function showIntro() {
+            document.getElementById('start-screen').classList.add('hidden');
+            document.getElementById('help-screen').classList.add('hidden');
+            document.getElementById('intro-screen').classList.remove('hidden');
+            document.getElementById('game-screen').classList.add('hidden');
+        }
+
+        function startGame() {
+            document.getElementById('start-screen').classList.add('hidden');
+            document.getElementById('help-screen').classList.add('hidden');
+            document.getElementById('intro-screen').classList.add('hidden');
+            document.getElementById('game-screen').classList.remove('hidden');
+        }
+
+        function makeChoice(choice) {
+            const choicesContainer = document.getElementById('choices-container');
+            const resultContainer = document.getElementById('result-container');
+            const resultText = document.getElementById('result-text');
+            
+            choicesContainer.classList.add('hidden');
+            resultContainer.classList.remove('hidden');
+            
+            if (choice === 'good') {
+                resultText.innerHTML = `
+                    <div class="dialogue-box">
+                        <div class="character-name">Дима (смеётся):</div>
+                        <div class="dialogue-text">«Ура! Ты самый лучший брат!»</div>
+                    </div>
+                    <div class="dialogue-box">
+                        <div class="character-name">Мама (улыбается):</div>
+                        <div class="dialogue-text">«Спасибо, Саша. Вот так и должен поступать настоящий мужчина.»</div>
+                    </div>
+                `;
+            } else {
+                lives--;
+                resultText.innerHTML = `
+                    <div class="dialogue-box">
+                        <div class="character-name">Дима (плачет):</div>
+                        <div class="dialogue-text">«Ты обещал…»</div>
+                    </div>
+                    <div class="dialogue-box">
+                        <div class="character-name">Мама (сердито):</div>
+                        <div class="dialogue-text">«Саша, я на тебя рассчитывала. Очень жаль.»</div>
+                    </div>
+                    <div class="lives">Жизни: ${lives}</div>
+                `;
+                
+                if (lives <= 0) {
+                    setTimeout(() => {
+                        alert('Игра окончена! Вы потеряли все жизни.');
+                        location.reload();
+                    }, 3000);
+                }
+            }
+        }
+    </script>
+</body>
+</html>
