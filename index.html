@@ -23,30 +23,54 @@
 
         .game-container {
             width: 100%;
-            max-width: 800px;
+            max-width: 900px;
             background: white;
-            border-radius: 20px;
+            border-radius: 25px;
             overflow: hidden;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+            box-shadow: 0 25px 50px rgba(0,0,0,0.4);
             position: relative;
+            min-height: 600px;
         }
 
         .game-header {
-            background: linear-gradient(90deg, #ff6b6b, #4ecdc4);
-            padding: 15px 20px;
+            background: linear-gradient(90deg, #667eea, #764ba2);
+            padding: 20px;
             color: white;
             text-align: center;
             font-weight: bold;
-            font-size: 18px;
-            min-height: 60px;
+            font-size: 20px;
             display: flex;
             align-items: center;
             justify-content: center;
+            position: relative;
+            min-height: 80px;
+        }
+
+        .back-to-menu-btn {
+            position: absolute;
+            left: 20px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: rgba(255,255,255,0.9);
+            border: 2px solid white;
+            color: #667eea;
+            padding: 8px 16px;
+            border-radius: 12px;
+            cursor: pointer;
+            font-weight: bold;
+            font-size: 16px;
+            transition: all 0.3s ease;
+        }
+
+        .back-to-menu-btn:hover {
+            background: white;
+            transform: translateY(-50%) scale(1.05);
         }
 
         .game-content {
             position: relative;
-            min-height: 500px;
+            height: 500px;
+            overflow: hidden;
         }
 
         .background {
@@ -63,10 +87,10 @@
 
         .characters {
             position: absolute;
-            top: 50%;
+            bottom: 0;
             left: 0;
             width: 100%;
-            height: 100%;
+            height: 60%;
             display: flex;
             justify-content: space-around;
             align-items: flex-end;
@@ -90,8 +114,8 @@
         .dialogue-container {
             position: relative;
             z-index: 3;
-            padding: 30px;
-            min-height: 200px;
+            padding: 20px;
+            height: 100%;
             display: flex;
             flex-direction: column;
             justify-content: flex-end;
@@ -101,28 +125,21 @@
             background: rgba(255, 255, 255, 0.95);
             border-radius: 15px;
             padding: 20px;
-            margin-bottom: 20px;
+            margin-bottom: 15px;
             box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-            border-left: 4px solid #4ecdc4;
-            opacity: 0;
-            transform: translateY(20px);
-            transition: opacity 0.5s ease, transform 0.5s ease;
-        }
-
-        .dialogue-box.show {
-            opacity: 1;
-            transform: translateY(0);
+            border: 2px solid #e0e0e0;
+            max-width: 100%;
         }
 
         .character-name {
             font-weight: bold;
-            color: #ff6b6b;
+            color: #667eea;
             margin-bottom: 8px;
             font-size: 16px;
         }
 
         .dialogue-text {
-            font-size: 18px;
+            font-size: 16px;
             line-height: 1.5;
             color: #333;
         }
@@ -137,63 +154,65 @@
             flex-direction: column;
             gap: 15px;
             z-index: 3;
-            padding: 0 30px 30px;
+            padding: 20px;
         }
 
         .choice-btn {
-            background: linear-gradient(90deg, #4ecdc4, #44a08d);
-            color: white;
-            border: none;
+            background: transparent;
+            color: #333;
+            border: 2px solid #667eea;
             padding: 15px 25px;
             border-radius: 12px;
-            font-size: 16px;
+            font-size: 15px;
             cursor: pointer;
             transition: all 0.3s ease;
             text-align: left;
-            display: flex;
-            align-items: center;
-            gap: 10px;
+            font-weight: 500;
         }
 
         .choice-btn:hover {
+            background: rgba(102, 126, 234, 0.1);
             transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
-        }
-
-        .choice-btn.good {
-            background: linear-gradient(90deg, #4ecdc4, #44a08d);
-        }
-
-        .choice-btn.bad {
-            background: linear-gradient(90deg, #ff6b6b, #ee5a52);
         }
 
         .result-container {
             background: rgba(255, 255, 255, 0.95);
             border-radius: 15px;
-            padding: 25px;
-            margin-top: 20px;
+            padding: 20px;
+            margin: 20px;
             box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            border: 2px solid #e0e0e0;
             z-index: 3;
-            position: relative;
         }
 
         .lives {
             position: absolute;
-            top: 15px;
-            right: 15px;
+            top: 20px;
+            right: 20px;
             background: #ff6b6b;
             color: white;
             padding: 5px 10px;
             border-radius: 10px;
             font-weight: bold;
+            font-size: 14px;
         }
 
         .hidden {
-            display: none;
+            display: none !important;
+        }
+
+        .screen {
+            height: 500px;
+            display: flex;
+            flex-direction: column;
         }
 
         .menu-container {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
             padding: 40px;
             text-align: center;
         }
@@ -202,7 +221,6 @@
             font-size: 32px;
             margin-bottom: 20px;
             color: #333;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
         }
 
         .menu-subtitle {
@@ -211,8 +229,6 @@
             color: #555;
             margin-bottom: 30px;
             max-width: 600px;
-            margin-left: auto;
-            margin-right: auto;
         }
 
         .menu-btn {
@@ -225,11 +241,19 @@
             cursor: pointer;
             margin: 10px;
             transition: all 0.3s ease;
+            font-weight: 600;
+            min-width: 200px;
         }
 
         .menu-btn:hover {
             transform: scale(1.05);
-            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+
+        .menu-btn.secondary {
+            background: transparent;
+            border: 2px solid #667eea;
+            color: #667eea;
         }
 
         .help-text {
@@ -238,113 +262,107 @@
             color: #333;
             max-width: 600px;
             margin: 0 auto;
+            font-size: 14px;
+            padding: 20px;
         }
 
         .help-text h3 {
             color: #667eea;
             margin: 20px 0 10px 0;
+            font-size: 18px;
         }
 
-        .back-btn {
-            position: absolute;
-            top: 15px;
-            left: 15px;
-            background: rgba(255,255,255,0.8);
-            border: none;
-            padding: 8px 15px;
-            border-radius: 10px;
-            cursor: pointer;
-            font-weight: bold;
-            color: #667eea;
-        }
-
-        .navigation-btns {
+        .navigation-container {
             display: flex;
-            justify-content: space-between;
-            padding: 0 30px 20px;
-            z-index: 3;
-            position: relative;
+            justify-content: center;
+            gap: 20px;
+            padding: 20px;
+            background: rgba(255,255,255,0.9);
         }
 
         .nav-btn {
-            background: linear-gradient(90deg, #667eea, #764ba2);
+            background: linear-gradient(135deg, #667eea, #764ba2);
             color: white;
             border: none;
-            padding: 10px 20px;
+            padding: 12px 30px;
             border-radius: 15px;
             cursor: pointer;
             font-size: 16px;
+            font-weight: 600;
             transition: all 0.3s ease;
         }
 
-        .nav-btn:hover {
+        .nav-btn:hover:not(:disabled) {
             transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
         }
 
         .nav-btn:disabled {
             background: #ccc;
             cursor: not-allowed;
-            transform: none;
-            box-shadow: none;
         }
 
-        .typing {
-            display: inline-block;
-            border-right: 2px solid #4ecdc4;
-            animation: blink 1s infinite;
-        }
-
-        @keyframes blink {
-            50% { border-color: transparent; }
+        .stage-info {
+            font-size: 14px;
+            opacity: 0.9;
         }
     </style>
 </head>
 <body>
     <div class="game-container">
         <!-- Стартовый экран -->
-        <div id="start-screen" class="menu-container">
-            <h1 class="menu-title">История Саши</h1>
-            <p class="menu-subtitle">
-                Привет! Сегодня твой день рождения, и я бы очень хотела провести его с тобой. Хоть сейчас мы не рядом, я приготовила для тебя подарок, который тебе предстоит найти. 
-                Перед тобой игра, где ты сыграешь за своего персонажа. Твоя задача – пройти путь до 24-летия, делая на своем жизненном пути правильные выборы. У тебя есть 3 жизни: если ты их потеряешь, то игра закончится, и придется начать все сначала. В конце ты увидишь секретный код: отправь его мне, чтобы узнать, как получить свой подарок. Удачи! ❤️‍🔥
-            </p>
-            <button class="menu-btn" onclick="startGame()">Играть</button>
-            <button class="menu-btn" onclick="showHelp()">Помощь</button>
+        <div id="start-screen" class="screen">
+            <div class="menu-container">
+                <h1 class="menu-title">История Саши</h1>
+                <p class="menu-subtitle">
+                    Привет! Сегодня твой день рождения, и я бы очень хотела провести его с тобой. Хоть сейчас мы не рядом, я приготовила для тебя подарок, который тебе предстоит найти. 
+                    Перед тобой игра, где ты сыграешь за своего персонажа. Твоя задача – пройти путь до 24-летия, делая на своем жизненном пути правильные выборы. У тебя есть 3 жизни: если ты их потеряешь, то игра закончится, и придется начать все сначала. В конце ты увидишь секретный код: отправь его мне, чтобы узнать, как получить свой подарок. Удачи! ❤️‍🔥
+                </p>
+                <button class="menu-btn" onclick="startNewGame()">Новая игра</button>
+                <button class="menu-btn secondary" onclick="continueGame()" id="continue-btn">Продолжить</button>
+                <button class="menu-btn secondary" onclick="showHelp()">Помощь</button>
+            </div>
         </div>
 
         <!-- Экран помощи -->
-        <div id="help-screen" class="menu-container hidden">
-            <button class="back-btn" onclick="showStart()">← Назад</button>
-            <h1 class="menu-title">Помощь</h1>
-            <div class="help-text">
-                <p>Добро пожаловать в интерактивную историю "История Саши"!</p>
-                <h3>Как играть:</h3>
-                <p>• Читайте диалоги персонажей и следите за сюжетом</p>
-                <p>• В ключевые моменты вам будут предложены выборы</p>
-                <p>• Ваши решения влияют на развитие истории и отношения с персонажами</p>
-                <p>• Некоторые выборы могут стоить вам жизней (у вас есть 3 жизни)</p>
-                <h3>Управление:</h3>
-                <p>• Используйте кнопки "Далее →" и "← Назад" для навигации по диалогам</p>
-                <p>• Используйте кнопки выбора для принятия решений</p>
-                <p>• Кнопка "Назад" возвращает вас в главное меню</p>
-                <h3>Советы:</h3>
-                <p>• Думайте перед тем, как принимать решения</p>
-                <p>• Постарайтесь сохранить все жизни для достижения лучшего конца</p>
-                <p>• В конце игры вы получите секретный код для получения подарка!</p>
+        <div id="help-screen" class="screen hidden">
+            <div class="game-header">
+                <button class="back-to-menu-btn" onclick="showStart()">← Меню</button>
+                <span>Помощь</span>
+            </div>
+            <div class="menu-container">
+                <div class="help-text">
+                    <p>Добро пожаловать в интерактивную историю "История Саши"!</p>
+                    <h3>Как играть:</h3>
+                    <p>• Читайте диалоги персонажей и следите за сюжетом</p>
+                    <p>• В ключевые моменты вам будут предложены выборы</p>
+                    <p>• Ваши решения влияют на развитие истории и отношения с персонажами</p>
+                    <p>• Некоторые выборы могут стоить вам жизней (у вас есть 3 жизни)</p>
+                    <h3>Сохранение прогресса:</h3>
+                    <p>• Ваш прогресс автоматически сохраняется в браузере</p>
+                    <p>• Вы можете закрыть игру и продолжить с того же места</p>
+                    <p>• Для сброса прогресса нажмите "Новая игра"</p>
+                    <h3>Управление:</h3>
+                    <p>• Используйте кнопки "Далее →" и "← Назад" для навигации по диалогам</p>
+                    <p>• Используйте кнопки выбора для принятия решений</p>
+                    <p>• Кнопка "Назад" возвращает вас в главное меню</p>
+                    <h3>Советы:</h3>
+                    <p>• Думайте перед тем, как принимать решения</p>
+                    <p>• Постарайтесь сохранить все жизни для достижения лучшего конца</p>
+                    <p>• В конце игры вы получите секретный код для получения подарка!</p>
+                </div>
             </div>
         </div>
 
         <!-- Игровой экран -->
-        <div id="game-screen" class="hidden">
+        <div id="game-screen" class="screen hidden">
             <div class="game-header">
-                <span id="stage-info"></span>
+                <button class="back-to-menu-btn" onclick="saveAndReturnToMenu()">← Меню</button>
+                <span class="stage-info" id="stage-info">Этап №1 | Возраст: 7 лет | Мурманск</span>
+                <div class="lives">Жизни: <span id="lives-count">3</span></div>
             </div>
             <div class="game-content">
-                <!-- МЕСТО ДЛЯ ФОНА - ЗАМЕНИТЕ URL НА СВОЙ -->
-                <div class="background" id="background" style="background-image: url('https://placehold.co/800x500/e0e0e0/999999?text=Фон+Мурманск');"></div>
+                <div class="background" id="background" style="background-image: url('https://placehold.co/900x500/e0e0e0/999999?text=Фон+Мурманск');"></div>
                 
-                <!-- МЕСТО ДЛЯ ПЕРСОНАЖЕЙ - ЗАМЕНИТЕ URL НА СВОИ -->
                 <div class="characters">
                     <div class="character" id="sasha" style="background-image: url('https://placehold.co/120x200/4ecdc4/ffffff?text=Саша');"></div>
                     <div class="character" id="mama" style="background-image: url('https://placehold.co/120x200/ff6b6b/ffffff?text=Мама');"></div>
@@ -352,185 +370,292 @@
                 </div>
                 
                 <div class="dialogue-container" id="dialogue-container">
-                    <!-- Диалоги будут добавляться сюда динамически -->
+                    <!-- Диалоги будут добавляться сюда -->
                 </div>
-                
-                <div class="navigation-btns">
-                    <button class="nav-btn" id="prev-btn" onclick="showPreviousDialogue()" disabled>← Назад</button>
-                    <button class="nav-btn" id="next-btn" onclick="showNextDialogue()">Далее →</button>
-                </div>
-                
-                <div class="choices-container hidden" id="choices-container">
-                    <button class="choice-btn good" onclick="makeChoice('good')">
-                        ✅ Присмотреть за Димой и пойти с ним гулять
-                    </button>
-                    <button class="choice-btn bad" onclick="makeChoice('bad')">
-                        ❌ Убежать к друзьям и оставить Диму
-                    </button>
-                </div>
-                
-                <div class="result-container hidden" id="result-container">
-                    <div id="result-text"></div>
-                </div>
+            </div>
+            
+            <div class="choices-container hidden" id="choices-container">
+                <!-- Выборы будут добавляться динамически -->
+            </div>
+            
+            <div class="result-container hidden" id="result-container">
+                <div id="result-text"></div>
+            </div>
+            
+            <div class="navigation-container" id="nav-container">
+                <button class="nav-btn" id="prev-btn" onclick="showPreviousDialogue()" disabled>← Назад</button>
+                <button class="nav-btn" id="next-btn" onclick="showNextDialogue()">Далее →</button>
             </div>
         </div>
     </div>
 
     <script>
-        let lives = 3;
-        let currentDialogueIndex = 0;
-        const dialogues = [
-            { character: "Мама", text: "«Саша, мне нужно сходить в парикмахерскую. Будь добр, присмотри за Димой. Он маленький, может упасть»" },
-            { character: "Саша", text: "«Маам, ну я же хочу с ребятами в футбол поиграть…»" },
-            { character: "Дима (тянет за руку)", text: "«Саш, пошли гулять! На улице так тепло!»" },
-            { character: "Мама (строго)", text: "«Ты старший брат. На тебе ответственность.»" },
-            { character: "Саша (думает)", text: "«Эх, как же быть?..»", isThought: true }
-        ];
+        // Система сохранения
+        const SAVE_KEY = 'sasha_story_save';
+        
+        // Игровые данные
+        const gameData = {
+            currentStage: 1,
+            currentDialogueIndex: 0,
+            lives: 3,
+            completedStages: [],
+            choices: {}
+        };
 
+        // Диалоги для первого этапа
+        const stages = {
+            1: {
+                title: "Этап №1 | Возраст: 7 лет | Мурманск",
+                background: "https://placehold.co/900x500/e0e0e0/999999?text=Фон+Мурманск",
+                dialogues: [
+                    { character: "Мама", text: "«Саша, мне нужно сходить в парикмахерскую. Будь добр, присмотри за Димой. Он маленький, может упасть»" },
+                    { character: "Саша", text: "«Маам, ну я же хочу с ребятами в футбол поиграть…»" },
+                    { character: "Дима (тянет за руку)", text: "«Саш, пошли гулять! На улице так тепло!»" },
+                    { character: "Мама (строго)", text: "«Ты старший брат. На тебе ответственность.»" },
+                    { character: "Саша (думает)", text: "«Эх, как же быть?..»", isThought: true }
+                ],
+                choices: [
+                    { text: "Присмотреть за Димой и пойти с ним гулять", type: "good" },
+                    { text: "Убежать к друзьям и оставить Диму", type: "bad" }
+                ]
+            }
+        };
+
+        // Загрузка сохранения при запуске
+        function loadSave() {
+            const save = localStorage.getItem(SAVE_KEY);
+            if (save) {
+                const parsed = JSON.parse(save);
+                Object.assign(gameData, parsed);
+                return true;
+            }
+            return false;
+        }
+
+        // Сохранение игры
+        function saveGame() {
+            localStorage.setItem(SAVE_KEY, JSON.stringify(gameData));
+        }
+
+        // Показ стартового экрана
         function showStart() {
-            document.getElementById('start-screen').classList.remove('hidden');
-            document.getElementById('help-screen').classList.add('hidden');
-            document.getElementById('game-screen').classList.add('hidden');
+            // Проверяем есть ли сохранение
+            const hasSave = loadSave();
+            const continueBtn = document.getElementById('continue-btn');
+            
+            if (hasSave && gameData.currentDialogueIndex > 0) {
+                continueBtn.style.display = 'block';
+                continueBtn.textContent = `Продолжить (Этап ${gameData.currentStage})`;
+            } else {
+                continueBtn.style.display = 'none';
+            }
+            
+            showScreen('start-screen');
         }
 
         function showHelp() {
-            document.getElementById('start-screen').classList.add('hidden');
-            document.getElementById('help-screen').classList.remove('hidden');
-            document.getElementById('game-screen').classList.add('hidden');
+            showScreen('help-screen');
         }
 
+        function showScreen(screenId) {
+            document.querySelectorAll('.screen').forEach(screen => {
+                screen.classList.add('hidden');
+            });
+            document.getElementById(screenId).classList.remove('hidden');
+        }
+
+        // Новая игра
+        function startNewGame() {
+            // Сброс данных
+            Object.assign(gameData, {
+                currentStage: 1,
+                currentDialogueIndex: 0,
+                lives: 3,
+                completedStages: [],
+                choices: {}
+            });
+            
+            localStorage.removeItem(SAVE_KEY);
+            startGame();
+        }
+
+        // Продолжить игру
+        function continueGame() {
+            loadSave();
+            startGame();
+        }
+
+        // Сохранить и вернуться в меню
+        function saveAndReturnToMenu() {
+            saveGame();
+            showStart();
+        }
+
+        // Запуск игры
         function startGame() {
-            document.getElementById('start-screen').classList.add('hidden');
-            document.getElementById('help-screen').classList.add('hidden');
-            document.getElementById('game-screen').classList.remove('hidden');
+            showScreen('game-screen');
             
-            // Анимация "печатания" для информации об этапе
-            const stageInfo = document.getElementById('stage-info');
-            const stageText = "Этап №1\nВозраст: 7 лет\nМесто: Мурманск, Инженерная ул.";
-            typeText(stageInfo, stageText, 50);
+            const stage = stages[gameData.currentStage];
             
-            // Сброс состояния
-            currentDialogueIndex = 0;
+            // Обновляем интерфейс
+            document.getElementById('stage-info').textContent = stage.title;
+            document.getElementById('background').style.backgroundImage = `url('${stage.background}')`;
+            document.getElementById('lives-count').textContent = gameData.lives;
             document.getElementById('dialogue-container').innerHTML = '';
             document.getElementById('choices-container').classList.add('hidden');
             document.getElementById('result-container').classList.add('hidden');
             document.getElementById('prev-btn').disabled = true;
+            document.getElementById('next-btn').disabled = false;
             document.getElementById('next-btn').textContent = 'Далее →';
+            document.getElementById('next-btn').onclick = showNextDialogue;
+            
+            // Если это продолжение, показываем с места остановки
+            if (gameData.currentDialogueIndex > 0) {
+                // Показываем все пройденные диалоги
+                for (let i = 0; i < gameData.currentDialogueIndex; i++) {
+                    showDialogue(stage.dialogues[i], false);
+                }
+                
+                // Проверяем, не закончились ли диалоги
+                if (gameData.currentDialogueIndex >= stage.dialogues.length) {
+                    showChoices();
+                }
+            } else {
+                // Новый этап - показываем первый диалог
+                showNextDialogue();
+            }
         }
 
-        function typeText(element, text, speed) {
-            element.textContent = '';
-            element.classList.add('typing');
-            let i = 0;
-            const timer = setInterval(() => {
-                if (i < text.length) {
-                    element.textContent += text.charAt(i);
-                    i++;
-                } else {
-                    clearInterval(timer);
-                    element.classList.remove('typing');
-                }
-            }, speed);
+        function showDialogue(dialogue, animate = true) {
+            const dialogueBox = document.createElement('div');
+            dialogueBox.className = 'dialogue-box';
+            if (animate) {
+                dialogueBox.style.opacity = '0';
+                dialogueBox.style.transform = 'translateY(20px)';
+            }
+            
+            dialogueBox.innerHTML = `
+                <div class="character-name ${dialogue.isThought ? 'thoughts' : ''}">${dialogue.character}${dialogue.isThought ? ' (думает):' : ':'}</div>
+                <div class="dialogue-text">${dialogue.text}</div>
+            `;
+            
+            document.getElementById('dialogue-container').appendChild(dialogueBox);
+            
+            if (animate) {
+                setTimeout(() => {
+                    dialogueBox.style.opacity = '1';
+                    dialogueBox.style.transform = 'translateY(0)';
+                    dialogueBox.style.transition = 'opacity 0.3s ease, transform 0.3s ease';
+                }, 10);
+            }
+            
+            dialogueBox.scrollIntoView({ behavior: 'smooth' });
         }
 
         function showNextDialogue() {
-            if (currentDialogueIndex < dialogues.length) {
-                const dialogue = dialogues[currentDialogueIndex];
-                const dialogueBox = document.createElement('div');
-                dialogueBox.className = 'dialogue-box';
-                dialogueBox.innerHTML = `
-                    <div class="character-name">${dialogue.isThought ? dialogue.character + ' (думает):' : dialogue.character + ':'}</div>
-                    <div class="dialogue-text">${dialogue.text}</div>
-                `;
-                if (dialogue.isThought) {
-                    dialogueBox.querySelector('.character-name').className += ' thoughts';
-                }
+            const stage = stages[gameData.currentStage];
+            if (gameData.currentDialogueIndex < stage.dialogues.length) {
+                const dialogue = stage.dialogues[gameData.currentDialogueIndex];
+                showDialogue(dialogue);
+                gameData.currentDialogueIndex++;
+                saveGame();
                 
-                document.getElementById('dialogue-container').appendChild(dialogueBox);
+                document.getElementById('prev-btn').disabled = gameData.currentDialogueIndex <= 1;
                 
-                // Анимация появления
-                setTimeout(() => {
-                    dialogueBox.classList.add('show');
-                }, 10);
-                
-                currentDialogueIndex++;
-                
-                // Обновление кнопок навигации
-                document.getElementById('prev-btn').disabled = currentDialogueIndex <= 1;
-                
-                if (currentDialogueIndex >= dialogues.length) {
-                    // Все диалоги показаны, показываем выборы
+                if (gameData.currentDialogueIndex >= stage.dialogues.length) {
                     document.getElementById('next-btn').textContent = 'Выбор →';
                     document.getElementById('next-btn').onclick = showChoices;
                 }
+            } else {
+                showChoices();
             }
         }
 
         function showPreviousDialogue() {
-            if (currentDialogueIndex > 0) {
+            if (gameData.currentDialogueIndex > 1) {
                 const dialogueContainer = document.getElementById('dialogue-container');
-                const lastDialogue = dialogueContainer.lastElementChild;
-                if (lastDialogue) {
-                    lastDialogue.remove();
-                    currentDialogueIndex--;
-                    
-                    document.getElementById('prev-btn').disabled = currentDialogueIndex <= 1;
-                    document.getElementById('next-btn').textContent = 'Далее →';
-                    document.getElementById('next-btn').onclick = showNextDialogue;
-                    document.getElementById('choices-container').classList.add('hidden');
-                    document.getElementById('result-container').classList.add('hidden');
-                }
+                dialogueContainer.removeChild(dialogueContainer.lastChild);
+                gameData.currentDialogueIndex--;
+                saveGame();
+                
+                document.getElementById('prev-btn').disabled = gameData.currentDialogueIndex <= 1;
+                document.getElementById('next-btn').textContent = 'Далее →';
+                document.getElementById('next-btn').onclick = showNextDialogue;
+                document.getElementById('choices-container').classList.add('hidden');
             }
         }
 
         function showChoices() {
-            document.getElementById('choices-container').classList.remove('hidden');
-            document.getElementById('next-btn').style.display = 'none';
-            document.getElementById('prev-btn').style.display = 'none';
+            const stage = stages[gameData.currentStage];
+            const choicesContainer = document.getElementById('choices-container');
+            choicesContainer.innerHTML = '';
+            
+            stage.choices.forEach((choice, index) => {
+                const button = document.createElement('button');
+                button.className = 'choice-btn';
+                button.textContent = choice.text;
+                button.onclick = () => makeChoice(choice.type);
+                choicesContainer.appendChild(button);
+            });
+            
+            choicesContainer.classList.remove('hidden');
+            document.getElementById('next-btn').disabled = true;
         }
 
-        function makeChoice(choice) {
-            const choicesContainer = document.getElementById('choices-container');
+        function makeChoice(choiceType) {
+            const stage = stages[gameData.currentStage];
             const resultContainer = document.getElementById('result-container');
             const resultText = document.getElementById('result-text');
             
-            choicesContainer.classList.add('hidden');
+            document.getElementById('choices-container').classList.add('hidden');
+            resultContainer.classList.remove('hidden');
             
-            if (choice === 'good') {
+            // Сохраняем выбор
+            gameData.choices[gameData.currentStage] = choiceType;
+            
+            if (choiceType === 'good') {
                 resultText.innerHTML = `
-                    <div class="dialogue-box show">
+                    <div class="dialogue-box">
                         <div class="character-name">Дима (смеётся):</div>
                         <div class="dialogue-text">«Ура! Ты самый лучший брат!»</div>
                     </div>
-                    <div class="dialogue-box show">
+                    <div class="dialogue-box">
                         <div class="character-name">Мама (улыбается):</div>
                         <div class="dialogue-text">«Спасибо, Саша. Вот так и должен поступать настоящий мужчина.»</div>
                     </div>
                 `;
             } else {
-                lives--;
+                gameData.lives--;
+                document.getElementById('lives-count').textContent = gameData.lives;
                 resultText.innerHTML = `
-                    <div class="dialogue-box show">
+                    <div class="dialogue-box">
                         <div class="character-name">Дима (плачет):</div>
                         <div class="dialogue-text">«Ты обещал…»</div>
                     </div>
-                    <div class="dialogue-box show">
+                    <div class="dialogue-box">
                         <div class="character-name">Мама (сердито):</div>
                         <div class="dialogue-text">«Саша, я на тебя рассчитывала. Очень жаль.»</div>
                     </div>
-                    <div class="lives">Жизни: ${lives}</div>
                 `;
                 
-                if (lives <= 0) {
+                if (gameData.lives <= 0) {
                     setTimeout(() => {
                         alert('Игра окончена! Вы потеряли все жизни.');
-                        location.reload();
-                    }, 3000);
+                        startNewGame();
+                    }, 1000);
+                    return;
                 }
             }
             
-            resultContainer.classList.remove('hidden');
+            // Помечаем этап как завершенный
+            gameData.completedStages.push(gameData.currentStage);
+            saveGame();
+            
+            resultContainer.scrollIntoView({ behavior: 'smooth' });
         }
+
+        // Инициализация при загрузке страницы
+        window.onload = showStart;
     </script>
 </body>
 </html>
