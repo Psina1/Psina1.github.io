@@ -1,667 +1,636 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>История Саши</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Happy 24th Birthday</title>
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        :root{
+            --char-width: 260px;
+            --char-height: 400px;
+            --characters-right-gap: 18px;
+            --nav-outset: 150px;
+
+            --sasha-tx: -30px;
+            --r1-tx: 0px;
+            --r2-tx: 0px;
+            --r3-tx: 0px;
+            --r4-tx: 0px;
+
+            --sasha-ty: 0px;
+            --r1-ty: 0px;
+            --r2-ty: 0px;
+            --r3-ty: 0px;
+            --r4-ty: 0px;
         }
 
-        body {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            min-height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            padding: 20px;
+        *{ box-sizing:border-box; margin:0; padding:0; font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+
+        body{
+            background: linear-gradient(135deg,#667eea 0%,#764ba2 100%);
+            min-height:100vh;
+            display:flex;
+            justify-content:center;
+            align-items:center;
+            padding:10px;
+            overflow:hidden;
         }
 
-        .game-container {
-            width: 100%;
-            max-width: 900px;
-            background: white;
-            border-radius: 25px;
-            overflow: hidden;
-            box-shadow: 0 25px 50px rgba(0,0,0,0.4);
-            position: relative;
-            min-height: 600px;
+        .game-container{
+            width:100%; max-width:1200px; background:transparent; overflow:visible;
+            position:relative; min-height:800px; height:90vh;
         }
 
-        .game-header {
-            background: linear-gradient(90deg, #667eea, #764ba2);
-            padding: 20px;
-            color: white;
-            text-align: center;
-            font-weight: bold;
-            font-size: 20px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            position: relative;
-            min-height: 80px;
+        .game-header{
+            background: linear-gradient(90deg,#667eea,#764ba2);
+            padding:15px 20px; color:white; font-weight:bold; font-size:20px;
+            display:flex; align-items:center; justify-content:center; position:relative; min-height:70px; z-index:100;
         }
 
-        .back-to-menu-btn {
-            position: absolute;
-            left: 20px;
-            top: 50%;
-            transform: translateY(-50%);
-            background: rgba(255,255,255,0.9);
-            border: 2px solid white;
-            color: #667eea;
-            padding: 8px 16px;
-            border-radius: 12px;
-            cursor: pointer;
-            font-weight: bold;
-            font-size: 16px;
-            transition: all 0.3s ease;
+        /* menu button fixed */
+        .back-to-menu-btn{
+            position:fixed; top:12px; left:12px;
+            background:rgba(255,255,255,0.95); border:2px solid white; color:#667eea;
+            padding:8px 14px; border-radius:12px; cursor:pointer; z-index:9999; font-weight:700;
+            box-shadow:0 6px 20px rgba(0,0,0,0.15);
         }
 
-        .back-to-menu-btn:hover {
-            background: white;
-            transform: translateY(-50%) scale(1.05);
+        .game-content{ position:relative; height:calc(100% - 70px); overflow:hidden; }
+
+        .background{ position:absolute; top:0; left:0; width:100%; height:100%; background-size:cover; background-position:center; z-index:1; }
+
+        .characters{
+            position:absolute; bottom:0; left:0; width:100%; height:70%;
+            display:flex; justify-content:space-between; align-items:flex-end; padding:20px; z-index:2; pointer-events:none;
         }
 
-        .game-content {
-            position: relative;
-            height: 500px;
-            overflow: hidden;
+        .character{
+            width:var(--char-width); height:var(--char-height); background-size:contain; background-repeat:no-repeat; background-position:bottom center;
+            transition: transform .2s ease, opacity .2s ease; display:none; pointer-events:auto;
+            transform: translateX(var(--tx,0px)) translateY(var(--ty,0px)) scale(1);
+            opacity: 1;
         }
+        .character:hover{ transform: translateX(var(--tx,0px)) translateY(var(--ty,0px)) scale(1.06); }
+        .character-right{ display:flex; gap:var(--characters-right-gap); align-items:flex-end; }
 
-        .background {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-size: cover;
-            background-position: center;
-            opacity: 0.3;
-            z-index: 1;
-        }
+        .dialogue-container{ position:relative; z-index:3; padding:20px 20px 140px 20px; height:100%; display:flex; flex-direction:column; justify-content:flex-end; overflow-y:auto; pointer-events:auto; }
 
-        .characters {
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            width: 100%;
-            height: 60%;
-            display: flex;
-            justify-content: space-around;
-            align-items: flex-end;
-            padding: 20px;
-            z-index: 2;
+        .dialogue-box{
+            background: rgba(255,255,255,0.92); border-radius:18px; padding:16px 18px; margin-bottom:18px;
+            box-shadow:0 8px 25px rgba(0,0,0,0.15); border:1px solid rgba(224,224,224,0.9); max-width:85%;
+            animation: fadeInUp .35s ease-out; backdrop-filter: blur(2px); position:relative;
         }
+        /* итоговые боксы будут иметь класс result-box — чтобы можно было их удалять по очереди */
+        .dialogue-box.result-box { border-color: rgba(200,120,120,0.12); }
+        .dialogue-container .dialogue-box:last-child{ margin-bottom:-48px; }
+        @keyframes fadeInUp{ from{opacity:0; transform:translateY(18px);} to{opacity:1; transform:translateY(0);} }
 
-        .character {
-            width: 120px;
-            height: 200px;
-            background-size: contain;
-            background-repeat: no-repeat;
-            background-position: bottom center;
-            transition: transform 0.3s ease;
-        }
+        .character-name{ font-weight:700; color:#667eea; margin-bottom:8px; font-size:18px; }
+        .dialogue-text{ font-size:18px; line-height:1.6; color:#333; }
+        .thoughts{ font-style:italic; color:#666; }
 
-        .character:hover {
-            transform: scale(1.1);
+        /* ВЕРНУЛ СТИЛИ ДЛЯ КНОПОК МЕНЮ (исправление "страшной" кнопки) */
+        .menu-btn{
+            background: linear-gradient(90deg,#667eea,#764ba2);
+            color:white; border:none; padding:18px 50px; border-radius:30px;
+            font-size:20px; cursor:pointer; margin:15px; font-weight:600; min-width:220px;
+            box-shadow:0 8px 25px rgba(0,0,0,0.3);
         }
+        .menu-btn.secondary{ background:transparent; border:2px solid #667eea; color:#667eea; }
 
-        .dialogue-container {
-            position: relative;
-            z-index: 3;
-            padding: 20px;
-            height: 100%;
-            display: flex;
-            flex-direction: column;
-            justify-content: flex-end;
-        }
+        .choices-container{ position:absolute; bottom:150px; left:0; width:100%; display:flex; flex-direction:column; gap:15px; z-index:4; padding:0 30px; }
+        .choice-btn{ background:linear-gradient(135deg,#667eea,#764ba2); color:white; border:none; padding:18px 30px; border-radius:15px; font-size:17px; cursor:pointer; box-shadow:0 6px 20px rgba(0,0,0,0.2); align-self:center; max-width:720px; }
 
-        .dialogue-box {
-            background: rgba(255, 255, 255, 0.95);
-            border-radius: 15px;
-            padding: 20px;
-            margin-bottom: 15px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-            border: 2px solid #e0e0e0;
-            max-width: 100%;
-        }
+        .lives{ position:absolute; top:15px; right:20px; background:#ff6b6b; color:white; padding:8px 15px; border-radius:12px; font-weight:bold; z-index:100; }
 
-        .character-name {
-            font-weight: bold;
-            color: #667eea;
-            margin-bottom: 8px;
-            font-size: 16px;
-        }
+        .hidden{ display:none !important; }
+        .screen{ height:100%; display:flex; flex-direction:column; }
 
-        .dialogue-text {
-            font-size: 16px;
-            line-height: 1.5;
-            color: #333;
-        }
+        .start-screen{ background:white; border-radius:25px; box-shadow:0 25px 50px rgba(0,0,0,0.4); }
+        .menu-container{ flex:1; display:flex; flex-direction:column; justify-content:center; align-items:center; padding:40px; text-align:center; }
+        .menu-title{ font-size:36px; margin-bottom:25px; color:#333; text-shadow:2px 2px 4px rgba(0,0,0,0.1); }
+        .menu-subtitle{ font-size:17px; line-height:1.7; color:#555; margin-bottom:40px; max-width:700px; }
 
-        .thoughts {
-            font-style: italic;
-            color: #666;
-        }
+        .navigation-container{ position:absolute; top:50%; left: calc(-1 * var(--nav-outset)); width:calc(100% + (var(--nav-outset) * 2)); transform:translateY(-50%); display:flex; justify-content:space-between; z-index:200; pointer-events:none; padding:0 10px; }
+        .nav-btn{ background:linear-gradient(135deg,#667eea,#764ba2); color:white; border:none; padding:14px 35px; border-radius:20px; cursor:pointer; font-size:18px; font-weight:600; box-shadow:0 8px 25px rgba(0,0,0,0.3); pointer-events:auto; }
+        .nav-btn:disabled{ background:#ccc; cursor:not-allowed; box-shadow:none; }
 
-        .choices-container {
-            display: flex;
-            flex-direction: column;
-            gap: 15px;
-            z-index: 3;
-            padding: 20px;
-        }
+        .stage-info{ font-size:16px; opacity:0.95; }
 
-        .choice-btn {
-            background: transparent;
-            color: #333;
-            border: 2px solid #667eea;
-            padding: 15px 25px;
-            border-radius: 12px;
-            font-size: 15px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            text-align: left;
-            font-weight: 500;
+        .life-hit{
+            position:absolute; top:18px; left:50%; transform:translateX(-50%); background:rgba(255,255,255,0.95);
+            border:2px solid rgba(0,0,0,0.08); padding:8px 14px; border-radius:18px; z-index:999; display:flex; gap:10px; align-items:center;
+            font-weight:700; color:#c0392b; box-shadow:0 10px 30px rgba(0,0,0,0.12); opacity:0; transition:opacity .25s ease, transform .35s cubic-bezier(.2,.8,.2,1);
         }
+        .life-hit.show{ opacity:1; transform:translateX(-50%) translateY(-6px); }
 
-        .choice-btn:hover {
-            background: rgba(102, 126, 234, 0.1);
-            transform: translateY(-2px);
-        }
-
-        .result-container {
-            background: rgba(255, 255, 255, 0.95);
-            border-radius: 15px;
-            padding: 20px;
-            margin: 20px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-            border: 2px solid #e0e0e0;
-            z-index: 3;
-        }
-
-        .lives {
-            position: absolute;
-            top: 20px;
-            right: 20px;
-            background: #ff6b6b;
-            color: white;
-            padding: 5px 10px;
-            border-radius: 10px;
-            font-weight: bold;
-            font-size: 14px;
-        }
-
-        .hidden {
-            display: none !important;
-        }
-
-        .screen {
-            height: 500px;
-            display: flex;
-            flex-direction: column;
-        }
-
-        .menu-container {
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            padding: 40px;
-            text-align: center;
-        }
-
-        .menu-title {
-            font-size: 32px;
-            margin-bottom: 20px;
-            color: #333;
-        }
-
-        .menu-subtitle {
-            font-size: 16px;
-            line-height: 1.6;
-            color: #555;
-            margin-bottom: 30px;
-            max-width: 600px;
-        }
-
-        .menu-btn {
-            background: linear-gradient(90deg, #667eea, #764ba2);
-            color: white;
-            border: none;
-            padding: 15px 40px;
-            border-radius: 25px;
-            font-size: 18px;
-            cursor: pointer;
-            margin: 10px;
-            transition: all 0.3s ease;
-            font-weight: 600;
-            min-width: 200px;
-        }
-
-        .menu-btn:hover {
-            transform: scale(1.05);
-            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
-        }
-
-        .menu-btn.secondary {
-            background: transparent;
-            border: 2px solid #667eea;
-            color: #667eea;
-        }
-
-        .help-text {
-            text-align: left;
-            line-height: 1.6;
-            color: #333;
-            max-width: 600px;
-            margin: 0 auto;
-            font-size: 14px;
-            padding: 20px;
-        }
-
-        .help-text h3 {
-            color: #667eea;
-            margin: 20px 0 10px 0;
-            font-size: 18px;
-        }
-
-        .navigation-container {
-            display: flex;
-            justify-content: center;
-            gap: 20px;
-            padding: 20px;
-            background: rgba(255,255,255,0.9);
-        }
-
-        .nav-btn {
-            background: linear-gradient(135deg, #667eea, #764ba2);
-            color: white;
-            border: none;
-            padding: 12px 30px;
-            border-radius: 15px;
-            cursor: pointer;
-            font-size: 16px;
-            font-weight: 600;
-            transition: all 0.3s ease;
-        }
-
-        .nav-btn:hover:not(:disabled) {
-            transform: translateY(-2px);
-        }
-
-        .nav-btn:disabled {
-            background: #ccc;
-            cursor: not-allowed;
-        }
-
-        .stage-info {
-            font-size: 14px;
-            opacity: 0.9;
-        }
+        @media (max-width:720px){ :root{ --char-width:140px; --char-height:220px; --nav-outset:60px; } .dialogue-box{ max-width:92%; font-size:16px; } }
     </style>
 </head>
 <body>
-    <div class="game-container">
-        <!-- Стартовый экран -->
-        <div id="start-screen" class="screen">
-            <div class="menu-container">
-                <h1 class="menu-title">История Саши</h1>
-                <p class="menu-subtitle">
-                    Привет! Сегодня твой день рождения, и я бы очень хотела провести его с тобой. Хоть сейчас мы не рядом, я приготовила для тебя подарок, который тебе предстоит найти. 
-                    Перед тобой игра, где ты сыграешь за своего персонажа. Твоя задача – пройти путь до 24-летия, делая на своем жизненном пути правильные выборы. У тебя есть 3 жизни: если ты их потеряешь, то игра закончится, и придется начать все сначала. В конце ты увидишь секретный код: отправь его мне, чтобы узнать, как получить свой подарок. Удачи! ❤️‍🔥
-                </p>
-                <button class="menu-btn" onclick="startNewGame()">Новая игра</button>
-                <button class="menu-btn secondary" onclick="continueGame()" id="continue-btn">Продолжить</button>
-                <button class="menu-btn secondary" onclick="showHelp()">Помощь</button>
-            </div>
-        </div>
+<div class="game-container">
+    <button class="back-to-menu-btn" onclick="saveAndReturnToMenu()">← Меню</button>
 
-        <!-- Экран помощи -->
-        <div id="help-screen" class="screen hidden">
-            <div class="game-header">
-                <button class="back-to-menu-btn" onclick="showStart()">← Меню</button>
-                <span>Помощь</span>
-            </div>
-            <div class="menu-container">
-                <div class="help-text">
-                    <p>Добро пожаловать в интерактивную историю "История Саши"!</p>
-                    <h3>Как играть:</h3>
-                    <p>• Читайте диалоги персонажей и следите за сюжетом</p>
-                    <p>• В ключевые моменты вам будут предложены выборы</p>
-                    <p>• Ваши решения влияют на развитие истории и отношения с персонажами</p>
-                    <p>• Некоторые выборы могут стоить вам жизней (у вас есть 3 жизни)</p>
-                    <h3>Сохранение прогресса:</h3>
-                    <p>• Ваш прогресс автоматически сохраняется в браузере</p>
-                    <p>• Вы можете закрыть игру и продолжить с того же места</p>
-                    <p>• Для сброса прогресса нажмите "Новая игра"</p>
-                    <h3>Управление:</h3>
-                    <p>• Используйте кнопки "Далее →" и "← Назад" для навигации по диалогам</p>
-                    <p>• Используйте кнопки выбора для принятия решений</p>
-                    <p>• Кнопка "Назад" возвращает вас в главное меню</p>
-                    <h3>Советы:</h3>
-                    <p>• Думайте перед тем, как принимать решения</p>
-                    <p>• Постарайтесь сохранить все жизни для достижения лучшего конца</p>
-                    <p>• В конце игры вы получите секретный код для получения подарка!</p>
-                </div>
-            </div>
-        </div>
+    <div id="life-hit" class="life-hit" aria-hidden="true"><span style="font-size:20px;">💔</span><span>-1 жизнь</span></div>
 
-        <!-- Игровой экран -->
-        <div id="game-screen" class="screen hidden">
-            <div class="game-header">
-                <button class="back-to-menu-btn" onclick="saveAndReturnToMenu()">← Меню</button>
-                <span class="stage-info" id="stage-info">Этап №1 | Возраст: 7 лет | Мурманск</span>
-                <div class="lives">Жизни: <span id="lives-count">3</span></div>
-            </div>
-            <div class="game-content">
-                <!-- ФОН МУРМАНСК - ВАШЕ ИЗОБРАЖЕНИЕ -->
-                <div class="background" id="background" style="background-image: url('https://github.com/Psina1/Psina1.github.io/raw/main/images/Murmansk-7-let.png?raw=true');"></div>
-                
-                <div class="characters">
-                    <!-- МЕСТО ДЛЯ ИЗОБРАЖЕНИЯ САШИ - ЗАМЕНИТЕ URL КОГДА ЗАГРУЗИТЕ -->
-                    <div class="character" id="sasha" style="background-image: url('https://github.com/Psina1/Psina1.github.io/raw/main/images/sasha.png?raw=true');"></div>
-                    
-                    <!-- МЕСТО ДЛЯ ИЗОБРАЖЕНИЯ МАМЫ - ЗАМЕНИТЕ URL КОГДА ЗАГРУЗИТЕ -->
-                    <div class="character" id="mama" style="background-image: url('https://github.com/Psina1/Psina1.github.io/raw/main/images/mama.png?raw=true');"></div>
-                    
-                    <!-- МЕСТО ДЛЯ ИЗОБРАЖЕНИЯ ДИМЫ - ЗАМЕНИТЕ URL КОГДА ЗАГРУЗИТЕ -->
-                    <div class="character" id="dima" style="background-image: url('https://github.com/Psina1/Psina1.github.io/raw/main/images/dima.png?raw=true');"></div>
-                </div>
-                
-                <div class="dialogue-container" id="dialogue-container">
-                    <!-- Диалоги будут добавляться сюда -->
-                </div>
-            </div>
-            
-            <div class="choices-container hidden" id="choices-container">
-                <!-- Выборы будут добавляться динамически -->
-            </div>
-            
-            <div class="result-container hidden" id="result-container">
-                <div id="result-text"></div>
-            </div>
-            
-            <div class="navigation-container" id="nav-container">
-                <button class="nav-btn" id="prev-btn" onclick="showPreviousDialogue()" disabled>← Назад</button>
-                <button class="nav-btn" id="next-btn" onclick="showNextDialogue()">Далее →</button>
-            </div>
+    <div id="start-screen" class="screen start-screen">
+        <div class="menu-container">
+            <h1 class="menu-title">Happy 24th Birthday</h1>
+            <p class="menu-subtitle">
+                Привет! Сегодня твой день рождения, и я бы очень хотела провести его с тобой. Хоть сейчас мы не рядом, я приготовила для тебя подарок, который тебе предстоит найти.
+                Перед тобой игра, где ты сыграешь за своего персонажа. Твоя задача – пройти путь до 24-летия, делая на своем жизненном пути правильные выборы. У тебя есть 3 жизни: если ты их потеряешь, то игра закончится, и придется начать все сначала. В конце ты увидишь секретный код: отправь его мне, чтобы узнать, как получить свой подарок. Удачи! ❤️‍🔥
+            </p>
+            <button class="menu-btn" onclick="startNewGame()">Новая игра</button>
+            <button class="menu-btn secondary" onclick="continueGame()" id="continue-btn">Продолжить</button>
         </div>
     </div>
 
-    <script>
-        // Система сохранения
-        const SAVE_KEY = 'sasha_story_save';
-        
-        // Игровые данные
-        const gameData = {
-            currentStage: 1,
-            currentDialogueIndex: 0,
-            lives: 3,
-            completedStages: [],
-            choices: {}
-        };
+    <div id="game-screen" class="screen hidden">
+        <div class="game-header">
+            <span class="stage-info" id="stage-info">Этап №1  Возраст: 7 лет  Место: Мурманск, Инженерная ул.</span>
+            <div class="lives">Жизни: <span id="lives-count">3</span></div>
+        </div>
 
-        // Диалоги для первого этапа
-        const stages = {
-            1: {
-                title: "Этап №1 | Возраст: 7 лет | Мурманск",
-                background: "https://github.com/Psina1/Psina1.github.io/raw/main/images/Murmansk-7-let.png?raw=true",
-                dialogues: [
-                    { character: "Мама", text: "«Саша, мне нужно сходить в парикмахерскую. Будь добр, присмотри за Димой. Он маленький, может упасть»" },
-                    { character: "Саша", text: "«Маам, ну я же хочу с ребятами в футбол поиграть…»" },
-                    { character: "Дима (тянет за руку)", text: "«Саш, пошли гулять! На улице так тепло!»" },
-                    { character: "Мама (строго)", text: "«Ты старший брат. На тебе ответственность.»" },
-                    { character: "Саша (думает)", text: "«Эх, как же быть?..»", isThought: true }
-                ],
-                choices: [
-                    { text: "Присмотреть за Димой и пойти с ним гулять", type: "good" },
-                    { text: "Убежать к друзьям и оставить Диму", type: "bad" }
-                ]
-            }
-        };
+        <div class="game-content">
+            <div class="background" id="background" style="background-image:url('https://raw.githubusercontent.com/Psina1/Psina1.github.io/main/images/Murmansk-7-let.png');"></div>
 
-        // Загрузка сохранения при запуске
-        function loadSave() {
-            const save = localStorage.getItem(SAVE_KEY);
-            if (save) {
-                const parsed = JSON.parse(save);
-                Object.assign(gameData, parsed);
-                return true;
-            }
-            return false;
+            <div class="characters">
+                <div class="character character-left" id="sasha" style="--tx:var(--sasha-tx); --ty:var(--sasha-ty); background-image:url('https://raw.githubusercontent.com/Psina1/Psina1.github.io/main/images/%D0%A1%D0%B0%D1%88%D0%B0%20(%D1%8D%D1%82%D0%B0%D0%BF%201).png');"></div>
+
+                <div class="character-right">
+                    <div class="character" id="mama-happy" style="--tx:var(--r1-tx); --ty:var(--r1-ty); background-image:url('https://raw.githubusercontent.com/Psina1/Psina1.github.io/main/images/%D0%9C%D0%B0%D0%BC%D0%B0%20%D1%80%D0%B0%D0%B4%D0%BE%D1%81%D1%82%D0%BD%D0%B0%D1%8F%20(%D1%8D%D1%82%D0%B0%D0%BF%201)%20(1).png');"></div>
+                    <div class="character" id="dima" style="--tx:var(--r2-tx); --ty:var(--r2-ty); background-image:url('https://raw.githubusercontent.com/Psina1/Psina1.github.io/main/images/%D0%94%D0%B8%D0%BC%D0%B0%20(%D1%8D%D1%82%D0%B0%D0%BF%201).png');"></div>
+                    <div class="character" id="mama-angry" style="--tx:var(--r3-tx); --ty:var(--r3-ty); background-image:url('https://raw.githubusercontent.com/Psina1/Psina1.github.io/main/images/%D0%9C%D0%B0%D0%BC%D0%B0%20%D1%81%D0%B5%D1%80%D0%B4%D0%B8%D1%82%D0%B0%D1%8F%20(%D1%8D%D1%82%D0%B0%D0%BF%201)%20(1).png');"></div>
+                    <div class="character" id="sasha-think" style="--tx:var(--r4-tx); --ty:var(--r4-ty); background-image:url('https://raw.githubusercontent.com/Psina1/Psina1.github.io/main/images/%D0%A1%D0%B0%D1%88%D0%B0%20%D0%B4%D1%83%D0%BC%D0%B0%D0%B5%D1%82%20(%D1%8D%D1%82%D0%B0%D0%BF%201).png');"></div>
+                </div>
+            </div>
+
+            <div class="dialogue-container" id="dialogue-container"></div>
+            <div class="choices-container hidden" id="choices-container"></div>
+        </div>
+
+        <div class="navigation-container" id="nav-container">
+            <button class="nav-btn" id="prev-btn" onclick="handlePrev()" disabled>← Назад</button>
+            <button class="nav-btn" id="next-btn" onclick="handleNext()">Далее →</button>
+        </div>
+    </div>
+</div>
+
+<script>
+/* ====== Состояние игры ====== */
+const SAVE_KEY = 'birthday_story_save';
+
+let gameData = {
+    currentStage: 1,
+    currentDialogueIndex: 0,
+    lives: 3,
+    completedStages: [],
+    choices: {}
+};
+
+/* playState: 'dialogue' | 'choices' | 'results' */
+let playState = 'dialogue';
+let resultQueue = [];
+let resultIndex = -1;
+
+const stages = {
+    1: {
+        title: "Этап №1  Возраст: 7 лет  Место: Мурманск, Инженерная ул.",
+        background: "https://raw.githubusercontent.com/Psina1/Psina1.github.io/main/images/Murmansk-7-let.png",
+        dialogues: [
+            { character: "Мама", text: "«Саша, мне нужно сходить в парикмахерскую. Будь добр, присмотри за Димой. Он маленький, может упасть»", activeCharacter: "mama-happy" },
+            { character: "Саша", text: "«Маам, ну я же хочу с ребятами в футбол поиграть…»", activeCharacter: "sasha" },
+            { character: "Дима (тянет за руку)", text: "«Саш, пошли гулять! На улице так тепло!»", activeCharacter: "dima" },
+            { character: "Мама (строго)", text: "«Ты старший брат. На тебе ответственность.»", activeCharacter: "mama-angry" },
+            { character: "Саша (думает)", text: "«Эх, как же быть?..»", isThought: true, activeCharacter: "sasha-think" }
+        ],
+        choices: [
+            { text: "Присмотреть за Димой и пойти с ним гулять", type: "good" },
+            { text: "Убежать к друзьям и оставить Диму", type: "bad" }
+        ],
+        // (опционально) можно перечислить resultImages здесь для предзагрузки:
+        resultImages: [
+            'https://github.com/Psina1/Psina1.github.io/blob/main/images/%D0%94%D0%B8%D0%BC%D0%B0%20(%D1%8D%D1%82%D0%B0%D0%BF%201).png?raw=true',
+            'https://github.com/Psina1/Psina1.github.io/blob/main/images/%D0%9C%D0%B0%D0%BC%D0%B0%20%D1%80%D0%B0%D0%B4%D0%BE%D1%81%D1%82%D0%BD%D0%B0%D1%8F%20(%D1%8D%D1%82%D0%B0%D0%BF%201)%20(1).png?raw=true',
+            'https://github.com/Psina1/Psina1.github.io/blob/main/images/%D0%94%D0%B8%D0%BC%D0%B0%20%D0%BF%D0%BB%D0%B0%D1%87%D0%B5%D1%82%20(%D1%8D%D1%82%D0%B0%D0%BF%201).png?raw=true',
+            'https://github.com/Psina1/Psina1.github.io/blob/main/images/%D0%9C%D0%B0%D0%BC%D0%B0%20%D1%81%D0%B5%D1%80%D0%B4%D0%B8%D1%82%D0%B0%D1%8F%20(%D1%8D%D1%82%D0%B0%D0%BF%201)%20(1).png?raw=true'
+        ]
+    }
+};
+
+/* ====== Утилиты ====== */
+function toRawGitHub(url){
+    try{
+        const u = new URL(url);
+        if(u.hostname.includes('github.com') && u.pathname.includes('/blob/')){
+            const parts = u.pathname.split('/');
+            const user = parts[1], repo = parts[2], branch = parts[4];
+            const path = parts.slice(5).join('/');
+            return `https://raw.githubusercontent.com/${user}/${repo}/${branch}/${path}`;
         }
+        return url.split('?')[0];
+    }catch(e){
+        return url;
+    }
+}
 
-        // Сохранение игры
-        function saveGame() {
-            localStorage.setItem(SAVE_KEY, JSON.stringify(gameData));
+function safeUrlForCss(url){
+    try {
+        return encodeURI(url);
+    } catch(e){
+        return url;
+    }
+}
+
+function preloadImage(url){
+    try{
+        const img = new Image();
+        img.src = toRawGitHub(url);
+    }catch(e){
+        console.warn('preloadImage error', e, url);
+    }
+}
+
+function preloadStageAssets(stage){
+    if(!stage) return;
+    // фон
+    if(stage.background) preloadImage(stage.background);
+
+    // стандартные background'ы персонажей из DOM
+    document.querySelectorAll('.character').forEach(ch=>{
+        const bg = ch.style.backgroundImage;
+        if(bg){
+            const m = bg.match(/url\((['"]?)(.*?)\1\)/);
+            if(m && m[2]) preloadImage(m[2]);
         }
+    });
 
-        // Показ стартового экрана
-        function showStart() {
-            // Проверяем есть ли сохранение
-            const hasSave = loadSave();
-            const continueBtn = document.getElementById('continue-btn');
-            
-            if (hasSave && gameData.currentDialogueIndex > 0) {
-                continueBtn.style.display = 'block';
-                continueBtn.textContent = `Продолжить (Этап ${gameData.currentStage})`;
-            } else {
-                continueBtn.style.display = 'none';
-            }
-            
-            showScreen('start-screen');
-        }
+    // заранее предзагрузим известные итоговые изображения, если заданы
+    if(stage.resultImages && Array.isArray(stage.resultImages)){
+        stage.resultImages.forEach(u => preloadImage(u));
+    }
+}
 
-        function showHelp() {
-            showScreen('help-screen');
-        }
+function loadSave(){
+    const s = localStorage.getItem(SAVE_KEY);
+    if(s){ gameData = {...JSON.parse(s)}; return true; }
+    return false;
+}
+function saveGame(){ localStorage.setItem(SAVE_KEY, JSON.stringify(gameData)); }
 
-        function showScreen(screenId) {
-            document.querySelectorAll('.screen').forEach(screen => {
-                screen.classList.add('hidden');
-            });
-            document.getElementById(screenId).classList.remove('hidden');
-        }
+/* ====== Экран и запуск ====== */
+function showStart(){
+    const has = loadSave();
+    const cb = document.getElementById('continue-btn');
+    if(has && gameData.currentDialogueIndex > 0){
+        cb.style.display = 'block';
+        cb.textContent = `Продолжить (Этап ${gameData.currentStage})`;
+    } else cb.style.display = 'none';
+    showScreen('start-screen');
+}
+function showScreen(id){
+    document.querySelectorAll('.screen').forEach(s=>s.classList.add('hidden'));
+    document.getElementById(id).classList.remove('hidden');
+}
+function startNewGame(){ gameData = {currentStage:1, currentDialogueIndex:0, lives:3, completedStages:[], choices:{}}; localStorage.removeItem(SAVE_KEY); startGame(); }
+function continueGame(){ loadSave(); startGame(); }
+function saveAndReturnToMenu(){ saveGame(); showStart(); }
 
-        // Новая игра
-        function startNewGame() {
-            // Сброс данных
-            Object.assign(gameData, {
-                currentStage: 1,
-                currentDialogueIndex: 0,
-                lives: 3,
-                completedStages: [],
-                choices: {}
-            });
-            
-            localStorage.removeItem(SAVE_KEY);
-            startGame();
-        }
+/* ====== Запуск этапа ====== */
+function startGame(){
+    showScreen('game-screen');
+    const stage = stages[gameData.currentStage];
+    document.getElementById('stage-info').textContent = stage.title;
+    document.getElementById('background').style.backgroundImage = `url('${toRawGitHub(stage.background)}')`;
+    document.getElementById('lives-count').textContent = gameData.lives;
+    document.getElementById('dialogue-container').innerHTML = '';
+    document.getElementById('choices-container').classList.add('hidden');
 
-        // Продолжить игру
-        function continueGame() {
-            loadSave();
-            startGame();
-        }
+    document.getElementById('prev-btn').disabled = gameData.currentDialogueIndex <= 0;
+    document.getElementById('next-btn').disabled = false;
+    document.getElementById('next-btn').textContent = 'Далее →';
+    document.getElementById('nav-container').classList.remove('hidden');
 
-        // Сохранить и вернуться в меню
-        function saveAndReturnToMenu() {
+    hideAllCharacters();
+
+    // важно — предзагружаем фон/спрайты/итоговые картинки этапа чтобы ускорить показ позже
+    preloadStageAssets(stage);
+
+    const dlgCount = stage.dialogues.length;
+    if(gameData.currentDialogueIndex >= dlgCount){
+        prepareChoices();
+        return;
+    }
+
+    playState = 'dialogue';
+    resultQueue = [];
+    resultIndex = -1;
+
+    showDialogueAt(gameData.currentDialogueIndex, false);
+}
+
+/* ====== Персонажи и диалоги ====== */
+function hideAllCharacters(){ document.querySelectorAll('.character').forEach(c=>c.style.display='none'); }
+function showCharacter(id){
+    hideAllCharacters();
+    const el = document.getElementById(id);
+    if(el) el.style.display = 'block';
+}
+
+function showDialogueAt(index, animate=true){
+    const stage = stages[gameData.currentStage];
+    if(!stage || index<0 || index>=stage.dialogues.length) return;
+    const d = stage.dialogues[index];
+    const container = document.getElementById('dialogue-container');
+    container.innerHTML = '';
+    const box = document.createElement('div');
+    box.className = 'dialogue-box';
+    if(animate){ box.style.opacity='0'; box.style.transform='translateY(20px)'; }
+    const nameLabel = d.isThought ? 'думает:' : `${d.character}:`;
+    box.innerHTML = `<div class="character-name ${d.isThought ? 'thoughts' : ''}">${nameLabel}</div><div class="dialogue-text">${d.text}</div>`;
+    container.appendChild(box);
+
+    if(d.activeCharacter) showCharacter(d.activeCharacter);
+
+    if(animate){
+        setTimeout(()=>{ box.style.opacity='1'; box.style.transform='translateY(0)'; box.style.transition='opacity .28s ease, transform .28s ease'; },10);
+    }
+    box.scrollIntoView({behavior:'smooth'});
+
+    document.getElementById('prev-btn').disabled = index <= 0;
+    document.getElementById('next-btn').disabled = false;
+
+    gameData.currentDialogueIndex = index;
+    saveGame();
+}
+
+/* ====== Навигация ====== */
+function handleNext(){
+    if(playState === 'dialogue'){
+        const stage = stages[gameData.currentStage];
+        const dlgCount = stage.dialogues.length;
+        if(gameData.currentDialogueIndex < dlgCount - 1){
+            showDialogueAt(gameData.currentDialogueIndex + 1, true);
+        } else {
+            gameData.currentDialogueIndex = dlgCount;
             saveGame();
-            showStart();
+            prepareChoices();
         }
-
-        // Запуск игры
-        function startGame() {
-            showScreen('game-screen');
-            
-            const stage = stages[gameData.currentStage];
-            
-            // Обновляем интерфейс
-            document.getElementById('stage-info').textContent = stage.title;
-            document.getElementById('background').style.backgroundImage = `url('${stage.background}')`;
-            document.getElementById('lives-count').textContent = gameData.lives;
-            document.getElementById('dialogue-container').innerHTML = '';
-            document.getElementById('choices-container').classList.add('hidden');
-            document.getElementById('result-container').classList.add('hidden');
-            document.getElementById('prev-btn').disabled = true;
-            document.getElementById('next-btn').disabled = false;
-            document.getElementById('next-btn').textContent = 'Далее →';
-            document.getElementById('next-btn').onclick = showNextDialogue;
-            
-            // Если это продолжение, показываем с места остановки
-            if (gameData.currentDialogueIndex > 0) {
-                // Показываем все пройденные диалоги
-                for (let i = 0; i < gameData.currentDialogueIndex; i++) {
-                    showDialogue(stage.dialogues[i], false);
-                }
-                
-                // Проверяем, не закончились ли диалоги
-                if (gameData.currentDialogueIndex >= stage.dialogues.length) {
-                    showChoices();
-                }
+    } else if(playState === 'results'){
+        // при нажатии Next: скрыть предыдущий result (если есть) и показать следующий
+        if(resultIndex < resultQueue.length - 1){
+            // если уже показан какой-то — удалим его
+            removeCurrentResultBox();
+            resultIndex++;
+            showResultItem(resultQueue[resultIndex]);
+            // если теперь последний — поменяем надпись
+            if(resultIndex === resultQueue.length - 1){
+                document.getElementById('next-btn').textContent = 'Перейти на 2й этап';
             } else {
-                // Новый этап - показываем первый диалог
-                showNextDialogue();
-            }
-        }
-
-        function showDialogue(dialogue, animate = true) {
-            const dialogueBox = document.createElement('div');
-            dialogueBox.className = 'dialogue-box';
-            if (animate) {
-                dialogueBox.style.opacity = '0';
-                dialogueBox.style.transform = 'translateY(20px)';
-            }
-            
-            dialogueBox.innerHTML = `
-                <div class="character-name ${dialogue.isThought ? 'thoughts' : ''}">${dialogue.character}${dialogue.isThought ? ' (думает):' : ':'}</div>
-                <div class="dialogue-text">${dialogue.text}</div>
-            `;
-            
-            document.getElementById('dialogue-container').appendChild(dialogueBox);
-            
-            if (animate) {
-                setTimeout(() => {
-                    dialogueBox.style.opacity = '1';
-                    dialogueBox.style.transform = 'translateY(0)';
-                    dialogueBox.style.transition = 'opacity 0.3s ease, transform 0.3s ease';
-                }, 10);
-            }
-            
-            dialogueBox.scrollIntoView({ behavior: 'smooth' });
-        }
-
-        function showNextDialogue() {
-            const stage = stages[gameData.currentStage];
-            if (gameData.currentDialogueIndex < stage.dialogues.length) {
-                const dialogue = stage.dialogues[gameData.currentDialogueIndex];
-                showDialogue(dialogue);
-                gameData.currentDialogueIndex++;
-                saveGame();
-                
-                document.getElementById('prev-btn').disabled = gameData.currentDialogueIndex <= 1;
-                
-                if (gameData.currentDialogueIndex >= stage.dialogues.length) {
-                    document.getElementById('next-btn').textContent = 'Выбор →';
-                    document.getElementById('next-btn').onclick = showChoices;
-                }
-            } else {
-                showChoices();
-            }
-        }
-
-        function showPreviousDialogue() {
-            if (gameData.currentDialogueIndex > 1) {
-                const dialogueContainer = document.getElementById('dialogue-container');
-                dialogueContainer.removeChild(dialogueContainer.lastChild);
-                gameData.currentDialogueIndex--;
-                saveGame();
-                
-                document.getElementById('prev-btn').disabled = gameData.currentDialogueIndex <= 1;
                 document.getElementById('next-btn').textContent = 'Далее →';
-                document.getElementById('next-btn').onclick = showNextDialogue;
-                document.getElementById('choices-container').classList.add('hidden');
             }
+        } else {
+            // если все уже показано — переходим
+            goToNextStageOrEnd();
         }
+    }
+}
 
-        function showChoices() {
-            const stage = stages[gameData.currentStage];
-            const choicesContainer = document.getElementById('choices-container');
-            choicesContainer.innerHTML = '';
-            
-            stage.choices.forEach((choice, index) => {
-                const button = document.createElement('button');
-                button.className = 'choice-btn';
-                button.textContent = choice.text;
-                button.onclick = () => makeChoice(choice.type);
-                choicesContainer.appendChild(button);
-            });
-            
-            choicesContainer.classList.remove('hidden');
-            document.getElementById('next-btn').disabled = true;
-        }
-
-        function makeChoice(choiceType) {
-            const stage = stages[gameData.currentStage];
-            const resultContainer = document.getElementById('result-container');
-            const resultText = document.getElementById('result-text');
-            
-            document.getElementById('choices-container').classList.add('hidden');
-            resultContainer.classList.remove('hidden');
-            
-            // Сохраняем выбор
-            gameData.choices[gameData.currentStage] = choiceType;
-            
-            if (choiceType === 'good') {
-                resultText.innerHTML = `
-                    <div class="dialogue-box">
-                        <div class="character-name">Дима (смеётся):</div>
-                        <div class="dialogue-text">«Ура! Ты самый лучший брат!»</div>
-                    </div>
-                    <div class="dialogue-box">
-                        <div class="character-name">Мама (улыбается):</div>
-                        <div class="dialogue-text">«Спасибо, Саша. Вот так и должен поступать настоящий мужчина.»</div>
-                    </div>
-                `;
+function handlePrev(){
+    if(playState === 'results'){
+        if(resultIndex >= 0){
+            removeCurrentResultBox();
+            resultIndex--;
+            if(resultIndex >= 0){
+                showResultItem(resultQueue[resultIndex]);
+                document.getElementById('next-btn').textContent = (resultIndex === resultQueue.length - 1) ? 'Перейти на 2й этап' : 'Далее →';
             } else {
-                gameData.lives--;
-                document.getElementById('lives-count').textContent = gameData.lives;
-                resultText.innerHTML = `
-                    <div class="dialogue-box">
-                        <div class="character-name">Дима (плачет):</div>
-                        <div class="dialogue-text">«Ты обещал…»</div>
-                    </div>
-                    <div class="dialogue-box">
-                        <div class="character-name">Мама (сердито):</div>
-                        <div class="dialogue-text">«Саша, я на тебя рассчитывала. Очень жаль.»</div>
-                    </div>
-                `;
-                
-                if (gameData.lives <= 0) {
-                    setTimeout(() => {
-                        alert('Игра окончена! Вы потеряли все жизни.');
-                        startNewGame();
-                    }, 1000);
-                    return;
-                }
+                playState = 'dialogue';
+                const stage = stages[gameData.currentStage];
+                const lastIdx = stage.dialogues.length - 1;
+                showDialogueAt(lastIdx, true);
             }
-            
-            // Помечаем этап как завершенный
-            gameData.completedStages.push(gameData.currentStage);
-            saveGame();
-            
-            resultContainer.scrollIntoView({ behavior: 'smooth' });
+        } else {
+            playState = 'dialogue';
+            const stage = stages[gameData.currentStage];
+            const lastIdx = stage.dialogues.length - 1;
+            showDialogueAt(lastIdx, true);
         }
+    } else {
+        const stage = stages[gameData.currentStage];
+        const dlgCount = stage.dialogues.length;
+        if(gameData.currentDialogueIndex > 0 && gameData.currentDialogueIndex <= dlgCount - 1){
+            showDialogueAt(gameData.currentDialogueIndex - 1, true);
+        } else if(gameData.currentDialogueIndex === dlgCount){
+            showDialogueAt(dlgCount - 1, true);
+        }
+    }
+}
 
-        // Инициализация при загрузке страницы
-        window.onload = showStart;
-    </script>
+/* удаляет текущий добавленный result-box (если есть) */
+function removeCurrentResultBox(){
+    const container = document.getElementById('dialogue-container');
+    const boxes = container.querySelectorAll('.dialogue-box.result-box');
+    if(boxes.length){
+        const last = boxes[boxes.length - 1];
+        container.removeChild(last);
+    }
+    // спрячем всех персонажей перед следующей
+    hideAllCharacters();
+}
+
+/* ====== Выбор ====== */
+function prepareChoices(){
+    const stage = stages[gameData.currentStage];
+    const choicesContainer = document.getElementById('choices-container');
+    choicesContainer.innerHTML = '';
+    stage.choices.forEach(choice=>{
+        const btn = document.createElement('button');
+        btn.className = 'choice-btn';
+        btn.textContent = choice.text;
+        btn.onclick = ()=> makeChoice(choice.type);
+        choicesContainer.appendChild(btn);
+    });
+    choicesContainer.classList.remove('hidden');
+
+    playState = 'choices';
+    document.getElementById('next-btn').disabled = true;
+    document.getElementById('prev-btn').disabled = stage.dialogues.length <= 0;
+}
+
+/* ====== Результаты по очереди и предзагрузка ====== */
+function preloadResults(items){
+    items.forEach(it=>{
+        if(it.imgUrl){
+            preloadImage(it.imgUrl);
+        }
+    });
+}
+
+function queueResults(items){
+    resultQueue = items.slice();
+    resultIndex = -1;
+    playState = 'results';
+    document.getElementById('next-btn').disabled = false;
+    document.getElementById('next-btn').textContent = 'Далее →';
+    document.getElementById('prev-btn').disabled = false;
+
+    // предзагрузим все изображения — чтобы первая итоговая реплика появилась быстро
+    preloadResults(items);
+}
+
+/* показываем одну итоговую реплику — ставим фон сразу (чтобы браузер начал загрузку),
+   показываем персонажа сразу (fallback) и затем плавно завершаем показ по onload */
+function showResultItem(item){
+    hideAllCharacters();
+
+    const container = document.getElementById('dialogue-container');
+
+    // удаляем предыдущий result-box (если остался)
+    removeCurrentResultBox();
+
+    // создаём result-box и добавляем в контейнер (чтобы текст не ждал картинки)
+    const box = document.createElement('div');
+    box.className = 'dialogue-box result-box';
+    box.innerHTML = `<div class="character-name">${item.name}:</div><div class="dialogue-text">${item.text}</div>`;
+    container.appendChild(box);
+    box.scrollIntoView({behavior:'smooth'});
+
+    if(item.characterId){
+        const el = document.getElementById(item.characterId);
+        if(!el) return;
+
+        if(item.imgUrl){
+            const url = toRawGitHub(item.imgUrl);
+            // ставим background прямо сейчас — браузер начнёт/продолжит загрузку
+            el.style.backgroundImage = `url("${safeUrlForCss(url)}")`;
+            // показываем элемент сразу (fallback)
+            el.style.display = 'block';
+
+            // если ресурс уже в кеше — probe.complete будет true
+            const probe = new Image();
+            let loaded = false;
+            probe.onload = () => {
+                loaded = true;
+                el.style.opacity = '1';
+            };
+            probe.onerror = () => {
+                loaded = true;
+                el.style.opacity = '1';
+                console.warn('Ошибка загрузки изображения итоговой реплики:', url);
+            };
+            // установим начальное состояние для плавного проявления
+            el.style.opacity = '0';
+            el.style.transition = 'opacity .28s ease';
+            probe.src = url;
+
+            if(probe.complete){
+                // кэшированный — показываем сразу
+                el.style.opacity = '1';
+                loaded = true;
+            }
+
+            // safety fallback: если загрузка повисла — через 700ms всё равно показываем элемент
+            setTimeout(()=>{
+                if(!loaded){
+                    el.style.opacity = '1';
+                }
+            }, 700);
+        } else {
+            el.style.display = 'block';
+            el.style.opacity = '1';
+        }
+    }
+}
+
+/* ====== Плашка -1 жизнь ====== */
+function showLifeHit(){
+    const el = document.getElementById('life-hit');
+    el.classList.add('show');
+    el.setAttribute('aria-hidden','false');
+    setTimeout(()=>{ el.classList.remove('show'); el.setAttribute('aria-hidden','true'); }, 1400);
+}
+
+/* ====== Обработка выбора игрока ====== */
+function makeChoice(choiceType){
+    const stage = stages[gameData.currentStage];
+    const choicesContainer = document.getElementById('choices-container');
+    choicesContainer.classList.add('hidden');
+
+    let items = [];
+    if(choiceType === 'good'){
+        items.push({
+            characterId: 'dima',
+            name: 'Дима (смеётся)',
+            text: '«Ура! Ты самый лучший брат!»',
+            imgUrl: 'https://github.com/Psina1/Psina1.github.io/blob/main/images/%D0%94%D0%B8%D0%BC%D0%B0%20(%D1%8D%D1%82%D0%B0%D0%BF%201).png?raw=true'
+        });
+        items.push({
+            characterId: 'mama-happy',
+            name: 'Мама (улыбается)',
+            text: '«Спасибо, Саша. Вот так и должен поступать настоящий мужчина.»',
+            imgUrl: 'https://github.com/Psina1/Psina1.github.io/blob/main/images/%D0%9C%D0%B0%D0%BC%D0%B0%20%D1%80%D0%B0%D0%B4%D0%BE%D1%81%D1%82%D0%BD%D0%B0%D1%8F%20(%D1%8D%D1%82%D0%B0%D0%BF%201)%20(1).png?raw=true'
+        });
+    } else {
+        // неправильный: -1 жизнь
+        gameData.lives--;
+        document.getElementById('lives-count').textContent = gameData.lives;
+        showLifeHit();
+
+        items.push({
+            characterId: 'dima',
+            name: 'Дима (плачет)',
+            text: '«Ты обещал…»',
+            imgUrl: 'https://github.com/Psina1/Psina1.github.io/blob/main/images/%D0%94%D0%B8%D0%BC%D0%B0%20%D0%BF%D0%BB%D0%B0%D1%87%D0%B5%D1%82%20(%D1%8D%D1%82%D0%B0%D0%BF%201).png?raw=true'
+        });
+        items.push({
+            characterId: 'mama-angry',
+            name: 'Мама (сердито)',
+            text: '«Саша, я на тебя рассчитывала. Очень жаль.»',
+            imgUrl: 'https://github.com/Psina1/Psina1.github.io/blob/main/images/%D0%9C%D0%B0%D0%BC%D0%B0%20%D1%81%D0%B5%D1%80%D0%B4%D0%B8%D1%82%D0%B0%D1%8F%20(%D1%8D%D1%82%D0%B0%D0%BF%201)%20(1).png?raw=true'
+        });
+    }
+
+    gameData.choices[gameData.currentStage] = choiceType;
+    gameData.completedStages.push(gameData.currentStage);
+    saveGame();
+
+    // подготовка очереди результатов
+    queueResults(items);
+
+    // автоматически показываем первую итоговую реплику сразу после выбора:
+    if(resultQueue.length){
+        resultIndex = 0;
+        showResultItem(resultQueue[0]);
+        if(resultQueue.length === 1){
+            document.getElementById('next-btn').textContent = 'Перейти на 2й этап';
+        } else {
+            document.getElementById('next-btn').textContent = 'Далее →';
+        }
+    }
+
+    playState = 'results';
+
+    if(gameData.lives <= 0){
+        setTimeout(()=>{ alert('Игра окончена! Вы потеряли все жизни.'); startNewGame(); }, 900);
+    }
+}
+
+/* ====== Переход к следующему этапу ====== */
+function goToNextStageOrEnd(){
+    const next = gameData.currentStage + 1;
+    if(stages[next]){
+        gameData.currentStage = next;
+        gameData.currentDialogueIndex = 0;
+        saveGame();
+        startGame();
+    } else {
+        showStart();
+    }
+}
+
+/* ====== Инициализация ====== */
+window.onload = showStart;
+</script>
 </body>
 </html>
